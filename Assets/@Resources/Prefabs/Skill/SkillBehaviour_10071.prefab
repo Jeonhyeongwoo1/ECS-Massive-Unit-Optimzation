@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2529250867182689689}
   - component: {fileID: 4485737519068552854}
   - component: {fileID: 3945093915972311915}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SkillBehaviour_10071
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5076079630716020561}
   - component: {fileID: 967918695420062798}
   - component: {fileID: 1413489636512547416}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4863,6 +4863,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4884,6 +4886,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0

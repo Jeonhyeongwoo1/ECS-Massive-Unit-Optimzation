@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4766018385012707583}
   - component: {fileID: 8429447811278917318}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Skill_Ultimate_10141
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,6 +52,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -73,6 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -98,7 +101,7 @@ GameObject:
   - component: {fileID: 2529250867182689689}
   - component: {fileID: 1947890620923638030}
   - component: {fileID: 3386357169643634867}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SkillBehaviour_10141
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6892169420456421911}
   - component: {fileID: 8458008220403699444}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,6 +222,8 @@ TrailRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -240,6 +245,7 @@ TrailRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -324,7 +330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 828338742181252151}
   - component: {fileID: 6310935171792221365}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Skill_Normal_10141_spot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,6 +372,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -387,6 +395,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -412,7 +421,7 @@ GameObject:
   - component: {fileID: 3231682481256397754}
   - component: {fileID: 4330734927770216920}
   - component: {fileID: 5959678023848346163}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,6 +464,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -476,6 +487,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
@@ -513,7 +525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6143348228634123435}
   - component: {fileID: 6866036591028427943}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: UltimateEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,7 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8180360449515631084}
   - component: {fileID: 3940509483253712656}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: NormalEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

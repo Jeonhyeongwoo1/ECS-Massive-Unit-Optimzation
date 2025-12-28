@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7050971369583156322}
   - component: {fileID: 2650587872801980035}
   - component: {fileID: 4086204239123573878}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,6 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -260451539
   m_SortingLayer: 1
   m_SortingOrder: 0
@@ -113,7 +116,7 @@ GameObject:
   - component: {fileID: 3339803298813631301}
   - component: {fileID: 1947890620923638030}
   - component: {fileID: 6438720716380063582}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SkillBehaviour_10091
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +230,7 @@ GameObject:
   - component: {fileID: 145483967712642243}
   - component: {fileID: 832917859562268712}
   - component: {fileID: 9119424691021301694}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FireEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5058,6 +5061,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5079,6 +5084,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 639984287
   m_SortingLayer: -5
   m_SortingOrder: 0
@@ -5130,9 +5136,21 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalScale.x
@@ -5208,13 +5226,25 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (1)
       objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5282,9 +5312,21 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalScale.x
@@ -5360,9 +5402,21 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalScale.x
@@ -5430,9 +5484,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 145483967712642243}
     m_Modifications:
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5500,9 +5566,21 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalScale.x
@@ -5578,9 +5656,21 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1912480711
       objectReference: {fileID: 0}
+    - target: {fileID: 3522452487741572962, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_Name
       value: Fire (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257899007154089910, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5285261073954667422, guid: 532601ae1325b98448af848b73e793da, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9031972425303933053, guid: 532601ae1325b98448af848b73e793da, type: 3}
       propertyPath: m_LocalScale.x

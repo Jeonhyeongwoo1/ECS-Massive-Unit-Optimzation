@@ -1,9 +1,10 @@
+using System.Collections.Generic;
+using MewVivor.Enum;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
 public struct MonsterSpawnRequestComponent : IComponentData
@@ -15,6 +16,8 @@ public struct MonsterSpawnRequestComponent : IComponentData
     public float Radius;
     public float Atk;
     public float MaxHP;
+    public MonsterType MonsterType;
+    public int SpawnedWaveIndex;
 }
 
 public struct MonsterSpawnTag : IComponentData
@@ -42,7 +45,8 @@ public partial struct MonsterSpawnSystem : ISystem
         var monsterComponent = SystemAPI.GetSingleton<MonsterSpawnComponent>();
         //랜덤 난수 생성기를 초기화
         var random = new Random(seed: 12345);
-        foreach (var (monsterSpawnRequestComponent, entity) in SystemAPI.Query<RefRO<MonsterSpawnRequestComponent>>().WithEntityAccess())
+        foreach (var (monsterSpawnRequestComponent, entity) 
+                 in SystemAPI.Query<RefRO<MonsterSpawnRequestComponent>>().WithEntityAccess())
         {
             MonsterSpawnRequestComponent component = monsterSpawnRequestComponent.ValueRO;
             int count = component.Count;
@@ -63,8 +67,10 @@ public partial struct MonsterSpawnSystem : ISystem
                     Speed = component.Speed,
                     Radius = component.Radius,
                     Atk = component.Atk,
-                    MaxHP = 10,
-                    CurrentHP = component.MaxHP
+                    MaxHP = component.MaxHP,
+                    CurrentHP = component.MaxHP,
+                    MonsterType = component.MonsterType,
+                    SpawnedWaveIndex = component.SpawnedWaveIndex,
                 };
                 
                 ecb.AddComponent(enemyEntity, enemyData);

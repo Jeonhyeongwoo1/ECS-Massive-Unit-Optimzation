@@ -172,6 +172,13 @@ namespace MewVivor
             presenter.OpenGameOverPopup(stageModel.ElapsedGameTime.Value, stageResult, _gameType);
         }
 
+        public void DeadMonster(MonsterDeadData monsterDeadData)
+        {
+            var model = ModelFactory.CreateOrGetModel<StageModel>();
+            model.AddMonsterKillCount(monsterDeadData.MonsterType);
+            _currentStage.OnDeadMonster(monsterDeadData);
+        }
+        
         public void DeadMonster(MonsterController monster)
         {
             var model = ModelFactory.CreateOrGetModel<StageModel>();
@@ -229,6 +236,7 @@ namespace MewVivor
             _currentStage.StartGame();
             UpdateGameState(GameState.Start);
             _event.Raise(GameEventType.GameStart);
+            Manager.I.Object.StartGame();
         }
 
         public void UpdateGameState(GameState gameState) => _gameState = gameState;

@@ -1,10 +1,11 @@
 using MewVivor.Data;
+using MewVivor.InGame.Skill;
 using Unity.Entities;
 using UnityEngine;
 
 public class SkillBridgeComponentData : IComponentData
 {
-    public GameObject GameObjectReference;
+    public Projectile Projectile;
     public BaseSkillData BaseSkillData;
 }
 

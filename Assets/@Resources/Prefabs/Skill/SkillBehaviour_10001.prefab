@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7514532335789277251}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8253958019401589077}
   - component: {fileID: 9120254140115378102}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SkillBehaviour_10001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7734414560169547297}
   - component: {fileID: 5273819511240557399}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Skill_Normal_10001_0_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3647147304058554735}
   - component: {fileID: 2688433406042819011}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}

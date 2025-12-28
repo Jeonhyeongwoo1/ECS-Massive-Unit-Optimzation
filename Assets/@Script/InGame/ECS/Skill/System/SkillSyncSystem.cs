@@ -17,20 +17,15 @@ public partial struct SkillSyncSystem : ISystem
         foreach (var (transform, skillComponent, entity)
                  in SystemAPI.Query<RefRW<LocalTransform>, SkillBridgeComponentData>().WithEntityAccess())
         {
-            if (skillComponent.GameObjectReference == null || skillComponent.GameObjectReference.activeInHierarchy == false)
+            if (skillComponent.Projectile.gameObject == null || skillComponent.Projectile.gameObject.activeInHierarchy == false)
             {
                 ecb.DestroyEntity(entity);
             }
             else
             {
-                transform.ValueRW.Position = skillComponent.GameObjectReference.transform.position;
-                transform.ValueRW.Rotation = skillComponent.GameObjectReference.transform.rotation;
+                transform.ValueRW.Position = skillComponent.Projectile.transform.position;
+                transform.ValueRW.Rotation = skillComponent.Projectile.transform.rotation;
             }
         }
-    }
-
-    public void OnDestroy(ref SystemState state)
-    {
-
     }
 }

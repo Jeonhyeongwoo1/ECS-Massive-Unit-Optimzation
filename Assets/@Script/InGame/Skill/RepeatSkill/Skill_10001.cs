@@ -20,11 +20,6 @@ namespace MewVivor.InGame.Skill
     {
         private SectorGizmoDrawer _sectorGizmoDrawer;
         
-        public override void Initialize(CreatureController owner, AttackSkillData attackSkillData)
-        {
-            base.Initialize(owner, attackSkillData);
-        }
-
         protected override async UniTask UseSkill()
         {
             int count = AttackSkillData.NumOfProjectile;
@@ -36,11 +31,12 @@ namespace MewVivor.InGame.Skill
                 IGeneratable generatable = prefab.GetComponent<IGeneratable>();
             
                 ObjectManager objectManager = Manager.I.Object;
-                List<MonsterController> monsterList = objectManager.GetNearestMonsterList();
+                // List<MonsterController> monsterList = objectManager.GetNearestMonsterList();
+                var monsterList = objectManager.GetNearestMonsterPositionList();
                 Vector3 direction = _owner.GetDirection();
                 if (monsterList != null && monsterList.Count > 0)
                 {
-                    direction = (monsterList[0].transform.position - _owner.transform.position).normalized;
+                    direction = (monsterList[0] - _owner.transform.position).normalized;
                 }
             
                 generatable.OnHit = OnHit;

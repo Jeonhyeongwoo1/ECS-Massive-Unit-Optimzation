@@ -268,6 +268,35 @@ namespace MewVivor.InGame.Stage
             RaiseSpawnMonster(spawnCount, monsterId, monsterType);
         }
 
+        protected override void ReceiveRewardItemByMonsterKill(MonsterDeadData monsterDeadData)
+        {
+            MonsterType monsterType = monsterDeadData.MonsterType;
+            var stageModel = ModelFactory.CreateOrGetModel<StageModel>();
+            var playerModel = ModelFactory.CreateOrGetModel<PlayerModel>();
+
+            int killCount = GetKillCount(stageModel, monsterType);
+            var config = GetRewardConfig(monsterType);
+
+            if (killCount > 0 && killCount % config.KillThreshold == 0)
+            {
+                if (!playerModel.AcquiredRewardItemDict.ContainsKey(config.RewardItemId))
+                {
+                    playerModel.AcquiredRewardItemDict[config.RewardItemId] = 0;
+                }
+
+                playerModel.AcquiredRewardItemDict[config.RewardItemId] += config.RewardAmount;
+            }
+
+            if (monsterType == MonsterType.Boss)
+            {
+                float prob = _configDataDict[InfiniteModeConfigName.RandomRewardProbForBossKill];
+                int rewardId = (int)_configDataDict[InfiniteModeConfigName.RandomRewardIdForBossKill];
+                int minRange = (int)_configDataDict[InfiniteModeConfigName.RandomRewardMinAmountForBossKill];
+                int maxRange = (int)_configDataDict[InfiniteModeConfigName.RandomRewardMaxAmountForBossKill];
+                GetRewardByBossKill(prob, rewardId, minRange, maxRange);
+            }
+        }
+
         protected override void ReceiveRewardItemByMonsterKill(MonsterController monster)
         {
             MonsterType monsterType = monster.MonsterType;
@@ -318,6 +347,57 @@ namespace MewVivor.InGame.Stage
                 ),
                 _ => (0, 0, 0)
             };
+        }
+
+        public override void SpawnDropItemByMonsterType(MonsterDeadData monsterDeadData)
+        {
+            MonsterType monsterType = monsterDeadData.MonsterType;
+            Vector3 monsterPosition = monsterDeadData.Position;
+            switch (monsterType)
+            {
+                case MonsterType.Normal:
+                    //Gem
+                    GemType gemType = GemType.None;
+                    float smallGemRatio = _configDataDict[InfiniteModeConfigName.PurpleGemDropRate];
+                    float greenGemRatio = _configDataDict[InfiniteModeConfigName.GreenGemDropRate];
+                    float blueGemRatio = _configDataDict[InfiniteModeConfigName.BlueGemDropRate];
+                    float yellowGemRatio = _configDataDict[InfiniteModeConfigName.RedGemDropRate];
+                    bool isSuccess = Utils.TrySpawnGem(ref gemType, smallGemRatio, greenGemRatio, blueGemRatio,
+                        yellowGemRatio);
+
+                    if (isSuccess)
+                    {
+                        GemController gem = Manager.I.Object.MakeGem(gemType, monsterPosition);
+                        if (gem != null)
+                        {
+                            CurrentMapController.AddItemInGrid(gem.transform.position, gem);
+                        }
+                    }
+
+                    //SkillUp
+                    // if (Random.value < _configDataDict[InfiniteModeConfigName.SkillUpItemDropProb])
+                    // {
+                    //     int id = Const.ID_SKILLUP;
+                    //     if (!Manager.I.Data.DropItemDict.TryGetValue(id, out DropItemData dropItemData))
+                    //     {
+                    //         Debug.LogWarning($"failed spawn drop item {id}");
+                    //         return;
+                    //     }
+                    //
+                    //     SpawnDropItem(dropItemData, monsterPosition);
+                    // }
+
+                    break;
+                case MonsterType.Boss:
+                    SpawnDropItem(monsterPosition);
+                    break;
+                case MonsterType.Elite:
+                    if (Manager.I.Data.DropItemDict.TryGetValue(Const.ID_MAGENTIC, out DropItemData dropItemData))
+                    {
+                        SpawnDropItem(dropItemData, monsterPosition);
+                    }
+                    break;
+            }
         }
 
         public override void SpawnDropItemByMonsterType(MonsterController monster)

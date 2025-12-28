@@ -8,10 +8,11 @@ public partial class MonsterAttackSystemBase : SystemBase
     protected override void OnUpdate()
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach (var (monsterAttackEventComponent, entity) in SystemAPI.Query<RefRO<MonsterAttackEventComponent>>().WithEntityAccess())
+        foreach (var (monsterAttackEventComponent, entity) 
+                 in SystemAPI.Query<RefRO<MonsterAttackEventComponent>>().WithEntityAccess())
         {
             var monsterEntity = monsterAttackEventComponent.ValueRO.MonsterEntity;
-            if (monsterEntity == Entity.Null)
+            if (monsterEntity == Entity.Null || !SystemAPI.Exists(monsterEntity))
             {
                 continue;
             }

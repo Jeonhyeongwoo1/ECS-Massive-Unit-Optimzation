@@ -21,6 +21,8 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
             transform.position = targetTransform.position;
             transform.localScale = Vector3.one * attackSkillData.Scale;
             gameObject.SetActive(true);
+            
+            CreateBaseSkillEntity(attackSkillData);
         }
 
         private void Awake()
@@ -42,9 +44,10 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
                 return;
             }
             
-            float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
-            _rigidbody.SetRotation(angle);
-            _rigidbody.linearVelocity = _direction * _projectileSpeed;
+            // float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+            // _rigidbody.SetRotation(angle);
+            // _rigidbody.linearVelocity = _direction * _projectileSpeed;
+            transform.Translate(_direction  * (_projectileSpeed * Time.deltaTime), Space.World);
         }
     }
 }

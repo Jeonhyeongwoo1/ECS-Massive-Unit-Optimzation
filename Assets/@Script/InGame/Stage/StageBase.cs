@@ -50,9 +50,18 @@ namespace MewVivor.InGame.Stage
             SpawnDropItemByMonsterType(monster);
             ReceiveRewardItemByMonsterKill(monster);
         }
+
+        public virtual void OnDeadMonster(MonsterDeadData monsterDeadData)
+        {
+            SpawnDropItemByMonsterType(monsterDeadData);
+            ReceiveRewardItemByMonsterKill(monsterDeadData);
+        }
         
         public abstract void SpawnDropItemByMonsterType(MonsterController monster);
         protected abstract void ReceiveRewardItemByMonsterKill(MonsterController monster);
+        
+        public abstract void SpawnDropItemByMonsterType(MonsterDeadData monsterDeadData);
+        protected abstract void ReceiveRewardItemByMonsterKill(MonsterDeadData monsterDeadData);
 
         public void SpawnDropItem(DropItemData dropItemData, Vector3 spawnPosition, bool useRandomSpawnPosition = true)
         {

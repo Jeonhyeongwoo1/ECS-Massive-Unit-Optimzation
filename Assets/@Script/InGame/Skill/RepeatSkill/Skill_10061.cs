@@ -8,6 +8,7 @@ using MewVivor.Enum;
 using MewVivor.InGame.Controller;
 using MewVivor.Key;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MewVivor.InGame.Skill
 {
@@ -18,6 +19,7 @@ namespace MewVivor.InGame.Skill
     public class Skill_10061 : RepeatAttackSkill
     {
         private IGeneratable _generatable;
+        
         
         public override void Initialize(CreatureController owner, AttackSkillData attackSkillData)
         {
@@ -37,35 +39,35 @@ namespace MewVivor.InGame.Skill
 
         protected override async UniTask UseSkill()
         {
-            Manager.I.Audio.Play(Sound.SFX, SoundKey.UseSkill_10061);
+            Manager.I.Audio.Play(Sound.SFX, SoundKey.UseSkill_10061).Forget();
             var player = _owner as PlayerController;
             _generatable.Generate(player.AttackPoint, _owner.GetDirection(), AttackSkillData, _owner, CurrentLevel);
 
-            List<Transform> list = null;
-            if (IsMaxLevel)
-            {
-                list = Manager.I.Object
-                    .GetMonsterAndBossTransformListInFanShape(_owner.transform,
-                        _owner.GetDirection() * -1,
-                        AttackSkillData.AttackRange,
-                        360);
-            }
-            else
-            {
-                list = Manager.I.Object
-                    .GetMonsterAndBossTransformListInFanShape(_owner.transform,
-                        _owner.GetDirection() * -1,
-                        AttackSkillData.AttackRange,
-                        AttackSkillData.ConeAngle);
-            }
-
-            if (list != null)
-            {
-                foreach (Transform tr in list)
-                {
-                    OnHit(tr, _generatable.ProjectileMono);
-                }
-            }
+            // List<Transform> list = null;
+            // if (IsMaxLevel)
+            // {
+            //     list = Manager.I.Object
+            //         .GetMonsterAndBossTransformListInFanShape(_owner.transform,
+            //             _owner.GetDirection() * -1,
+            //             AttackSkillData.AttackRange,
+            //             360);
+            // }
+            // else
+            // {
+            //     list = Manager.I.Object
+            //         .GetMonsterAndBossTransformListInFanShape(_owner.transform,
+            //             _owner.GetDirection() * -1,
+            //             AttackSkillData.AttackRange,
+            //             AttackSkillData.ConeAngle);
+            // }
+            //
+            // if (list != null)
+            // {
+            //     foreach (Transform tr in list)
+            //     {
+            //         OnHit(tr, _generatable.ProjectileMono);
+            //     }
+            // }
             
             await UniTask.WaitForSeconds(0.3f);
             _generatable.Release();

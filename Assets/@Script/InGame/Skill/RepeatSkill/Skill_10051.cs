@@ -27,15 +27,15 @@ namespace MewVivor.InGame.Skill
         {
             int count = AttackSkillData.NumOfProjectile;
             int index = 0;
-            List<MonsterController> list = Manager.I.Object.GetNearestMonsterList(count);
+            List<Vector3> list = Manager.I.Object.GetNearestMonsterPositionList(count);
             if (list != null)
             {
-                foreach (MonsterController monster in list)
+                foreach (Vector3 monsterPosition in list)
                 {
-                    Manager.I.Audio.Play(Sound.SFX, SoundKey.UseSkill_10051);
+                    Manager.I.Audio.Play(Sound.SFX, SoundKey.UseSkill_10051).Forget();
                     index++;
                     //한개인 경우에는 플레이어가 바라보는 방향으로 발사
-                    Vector3 direction = (monster.Position - _owner.Position).normalized;
+                    Vector3 direction = (monsterPosition - _owner.Position).normalized;
                     GameObject prefab = Manager.I.Resource.Instantiate(AttackSkillData.PrefabLabel);
                     var generatable = prefab.GetComponent<IGeneratable>();
                     generatable.OnHit = OnHit;

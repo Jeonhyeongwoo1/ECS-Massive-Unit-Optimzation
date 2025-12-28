@@ -2,7 +2,6 @@ using DG.Tweening;
 using MewVivor.Common;
 using MewVivor.Data;
 using MewVivor.Enum;
-using MewVivor.InGame.Enum;
 using UnityEngine;
 
 namespace MewVivor.InGame.Skill.SKillBehaviour
@@ -32,6 +31,8 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
             transform.position = targetTransform.position;
             transform.localScale = Vector3.one * attackSkillData.Scale;
             gameObject.SetActive(true);
+            
+            CreateBaseSkillEntity(attackSkillData);
         }
 
         private void Awake()
@@ -81,21 +82,33 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
                 transform.position = _camera.ViewportToWorldPoint(clampedPos);
             }
 
-            float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
-            _rigidbody.SetRotation(angle);
-            _rigidbody.linearVelocity = _direction * _projectileSpeed;
+            // float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
+            // _rigidbody.SetRotation(angle);
+            
+            transform.Translate(_direction * (_projectileSpeed * Time.deltaTime), Space.World);
+            // _rigidbody.linearVelocity = _direction * _projectileSpeed;
         }
 
-        protected override void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag(Tag.Monster) || other.CompareTag(Tag.ItemBox))
-            {
-                OnHit?.Invoke(other.transform, this);
+        // protected override void OnTriggerEnter2D(Collider2D other)
+        // {
+        //     if (other.CompareTag(Tag.Monster) || other.CompareTag(Tag.ItemBox))
+        //     {
+        //         OnHit?.Invoke(other.transform, this);
+        //
+        //         if (_isMaxLevel)
+        //         {
+        //             _direction = Vector3.Reflect(_direction, Vector3.down);
+        //         }
+        //     }
+        // }
 
-                if (_isMaxLevel)
-                {
-                    _direction = Vector3.Reflect(_direction, Vector3.down);
-                }
+        public override void OnHitMonsterEntity(Unity.Entities.Entity monsterEntity)
+        {
+            base.OnHitMonsterEntity(monsterEntity);
+
+            if (_isMaxLevel)
+            {
+                _direction = Vector3.Reflect(_direction, Vector3.down);
             }
         }
 

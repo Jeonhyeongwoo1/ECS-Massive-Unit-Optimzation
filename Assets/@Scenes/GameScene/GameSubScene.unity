@@ -166,7 +166,18 @@ MonoBehaviour:
   SkillPrefabList:
   - Prefab: {fileID: 5921193495588977649, guid: 7faa607f79c57be44aaafdc8e787aee3, type: 3}
     SkillType: 10001
-  prefab: {fileID: 7025745223761162731, guid: d100568815bdf4745a04251c5d7c7691, type: 3}
+  - Prefab: {fileID: 1749161862118521608, guid: 7fb4d630bcdbc2b41b358e0f1a65c487, type: 3}
+    SkillType: 10011
+  - Prefab: {fileID: 1282135726957894694, guid: 05c3d7352e5522a4f8d2db221c03f8c1, type: 3}
+    SkillType: 10021
+  - Prefab: {fileID: 1282135726957894694, guid: 0343fe563ebf1b3408ff10414e7d9487, type: 3}
+    SkillType: 10031
+  - Prefab: {fileID: 1282135726957894694, guid: b06d115cb7a7eea419f96be17cd6deab, type: 3}
+    SkillType: 10041
+  - Prefab: {fileID: 1282135726957894694, guid: 3d0952cb2a95427498abb7d6aa9065d2, type: 3}
+    SkillType: 10051
+  - Prefab: {fileID: 1282135726957894694, guid: 588e9bf0f03785749a526ed806649405, type: 3}
+    SkillType: 10061
 --- !u!1 &1446553422
 GameObject:
   m_ObjectHideFlags: 0

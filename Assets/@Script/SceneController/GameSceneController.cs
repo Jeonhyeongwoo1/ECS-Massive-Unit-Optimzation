@@ -1,4 +1,5 @@
 using System;
+using MewVivor.Enum;
 using MewVivor.Factory;
 using MewVivor.Managers;
 using MewVivor.Model;
@@ -30,7 +31,9 @@ namespace MewVivor.Controller
                     Speed = 2,
                     Radius = 2,
                     Atk = 10,
-                    MaxHP = 100,
+                    MaxHP = 130,
+                    MonsterType = MonsterType.Normal,
+                    SpawnedWaveIndex = 1
                 });
             }
         }

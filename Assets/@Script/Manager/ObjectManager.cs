@@ -12,8 +12,11 @@ using MewVivor.InGame.Enum;
 using MewVivor.InGame.View;
 using MewVivor.Key;
 using MewVivor.Managers;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 using Random = UnityEngine.Random;
@@ -45,12 +48,31 @@ namespace MewVivor
         private PoolManager _pool;
         private EventManager _event;
         private Camera _camera;
-        
-        private List<MonsterController> _activateMonsterList = new();
-        private List<DropItemController> _droppedItemControllerList = new();
 
+        private List<MonsterController> _activateMonsterList;
+        private List<DropItemController> _droppedItemControllerList = new();
+        
         private PlayerController _player;
         private BossBarrierController _bossBarrier;
+
+        private EntityManager _entityManager;
+        private EntityQuery _monsterEntityQuery;
+        private NativeArray<Entity> _monsterEntityArray => _monsterEntityQuery.ToEntityArray(Allocator.Temp);
+
+        private NativeArray<LocalTransform> _monsterLocalTransfromArray
+        {
+            get
+            {
+                if (_monsterEntityQuery == default || _monsterEntityQuery.IsEmpty)
+                {
+                    return default;
+                }
+                
+                var data =
+                    _monsterEntityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+                return data;
+            }
+        }
         
         public void Initialize()
         {
@@ -67,6 +89,12 @@ namespace MewVivor
         ~ObjectManager()
         {
             RemoveEvent();    
+        }
+
+        public void StartGame()
+        {
+            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            _monsterEntityQuery = _entityManager.CreateEntityQuery(typeof(MonsterComponent), typeof(LocalTransform));
         }
 
         public void GameEnd()
@@ -136,6 +164,33 @@ namespace MewVivor
         {
             _activateMonsterList.Remove(monster);
             _pool.ReleaseObject(monster.PrefabLabel, monster.gameObject);
+        }
+
+        public void DeadMonster(MonsterDeadData monsterDeadData)
+        {
+            Manager.I.Game.DeadMonster(monsterDeadData);
+            
+            switch (monsterDeadData.MonsterType)
+            {
+                case MonsterType.Normal:
+                    break;
+                case MonsterType.Elite:
+                    break;
+                case MonsterType.Boss:
+                    var uiGameScene = Manager.I.UI.SceneUI as UI_GameScene;
+                    if (uiGameScene != null)
+                    {
+                        uiGameScene.HideMonsterInfo(monsterDeadData.MonsterType);
+                    }
+                    
+                    if (_bossBarrier != null)
+                    {
+                        _bossBarrier.Release();
+                    }
+                    
+                    Manager.I.Game.CurrentStage.OnBossKill();
+                    break;
+            }
         }
 
         public void DeadMonster(MonsterController monster)
@@ -237,20 +292,37 @@ namespace MewVivor
             }
 
             CreatureData data = _data.CreatureDict[monsterId];
-            // var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            // var requestEntity = entityManager.CreateEntity();
-            // spawnPosition += _player.Position;
-            // entityManager.AddComponentData(requestEntity, new MonsterSpawnRequestComponent()
-            // {
-            //     Count = 1,
-            //     PlayerPosition = new float3(spawnPosition.x, spawnPosition.y, spawnPosition.z),
-            //     Scale = 2.5f,
-            //     Speed = 2,
-            //     Radius = 2,
-            //     Atk = data.Atk,
-            //     MaxHP = data.MaxHp
-            // });
 
+            return null;
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var requestEntity = entityManager.CreateEntity();
+            spawnPosition += _player.Position;
+            entityManager.AddComponentData(requestEntity, new MonsterSpawnRequestComponent()
+            {
+                Count = 1,
+                PlayerPosition = new float3(spawnPosition.x, spawnPosition.y, spawnPosition.z),
+                Scale = 2.5f,
+                Speed = 2,
+                Radius = 2,
+                MaxHP = 130,
+                Atk = data.Atk,
+                MonsterType = monsterType,
+                SpawnedWaveIndex = waveIndex
+            });
+
+            switch (monsterType)
+            {
+                case MonsterType.Boss:
+                    var uiGameScene = Manager.I.UI.SceneUI as UI_GameScene;
+                    uiGameScene.ShowMonsterInfo(MonsterType.Boss, data.DescriptionTextID, 1);
+                    var prefab = _resource.Instantiate("BossBarrierController");
+                    var bossBarrierController = prefab.GetComponent<BossBarrierController>();
+                    bossBarrierController.Initialize(BarrierType.Circle);
+                    _bossBarrier = bossBarrierController;
+                    RemoveMonster(MonsterType.Normal, false);
+                    break;
+            }
+            
             return null;
             
             GameObject monsterObj = _resource.Instantiate(data.PrefabLabel);
@@ -343,15 +415,17 @@ namespace MewVivor
         
         public void ShowDamageFont(Vector2 pos, float damage, float healAmount, Transform parent, bool isCritical = false)
         {
-            string prefabName;
-            if (isCritical)
-                prefabName = "CriticalDamageFont";
-            else
-                prefabName = "DamageFont";
+            // string prefabName;
+            // if (isCritical)
+            //     prefabName = "CriticalDamageFont";
+            // else
+            //     prefabName = "DamageFont";
+            //
+            // GameObject go = _resource.Instantiate(prefabName);
+            // DamageFont damageText = go.GetOrAddComponent<DamageFont>();
 
-            GameObject go = _resource.Instantiate(prefabName);
-            DamageFont damageText = go.GetOrAddComponent<DamageFont>();
-            damageText.SetInfo(pos, damage, healAmount, parent, isCritical);
+            var damageText = Manager.I.UI.UIFontObject.GetDamageFont(isCritical);
+            damageText?.SetInfo(pos, damage, healAmount, parent, isCritical);
         }
 
         public List<MonsterController> GetMonsterInRange(float minDistance, float maxDistance, Vector3 targetPosition)
@@ -394,6 +468,45 @@ namespace MewVivor
                    viewportPos.y >= 0 && viewportPos.y <= 1;
         }
         
+        
+        #region Entity
+
+        public List<Vector3> GetNearestMonsterPositionList(int count = 1, float minDistance = 0f)
+        {
+            if (Manager.I.Game.GameState == GameState.Done)
+            {
+                return null;
+            }
+
+            Vector3 playerPos = _player.Position;
+            float minDistanceSqr = minDistance * minDistance;
+            var monsterArray = _monsterLocalTransfromArray
+                .Where(m => (playerPos - m.Position.ToVector3()).sqrMagnitude >= minDistanceSqr)
+                .OrderBy(m => (playerPos - m.Position.ToVector3()).sqrMagnitude)
+                .Select(x => x.Position.ToVector3())
+                .ToList();
+            
+            int min = math.min(count, monsterArray.Count);
+            if (min == 0)
+            {
+                return null;
+            }
+
+            monsterArray = monsterArray.Take(min).ToList();
+            return monsterArray;
+        }
+
+        public void AttackMonsterAndBossEntityListInFanShape(Entity skillEntity, float damage, bool isCritical,
+            Vector3 position, Vector3 direction, float radius,
+            float angle = 180)
+        {
+            var skillHitSystemBase = _entityManager.World.GetOrCreateSystemManaged<SkillHitSystemBase>();
+            skillHitSystemBase.AttackMonsterAndBossEntityListInFanShape(skillEntity, damage, isCritical, position,
+                direction, radius, angle);
+        }
+
+        #endregion
+       
         public List<MonsterController> GetNearestMonsterList(int count = 1, float minDistance = 0f)
         {
             if (Manager.I.Game.GameState == GameState.Done)
@@ -458,7 +571,7 @@ namespace MewVivor
         
         public Vector2 GetRandomPositionOutsideCamera(float distanceFromEdge = 2f)
         {
-            Camera cam = Camera.main;
+            Camera cam = Camera;
 
             // 카메라의 뷰포트는 (0,0) ~ (1,1)
             // 외부는 -distance ~ 0 또는 1 ~ 1+distance 범위로 확장
@@ -493,8 +606,9 @@ namespace MewVivor
 
             return worldPosition;
         }
-
         
+        
+
         private Collider2D[] _collider2D = new Collider2D[100];
         private List<Transform> _cachedMonsterList = new();
         

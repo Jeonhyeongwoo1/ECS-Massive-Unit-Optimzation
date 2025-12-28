@@ -138,6 +138,51 @@ namespace MewVivor.InGame.Stage
             }
         }
 
+        protected override void ReceiveRewardItemByMonsterKill(MonsterDeadData monsterDeadData)
+        {
+            MonsterType monsterType = monsterDeadData.MonsterType;
+            Vector3 monsterPosition = monsterDeadData.Position;
+            if (monsterType == MonsterType.Boss)
+            {
+                int rewardId = _waveData.BossClearRewardId;
+                float prob = _waveData.BossClearRewardProb;
+                if (_waveData.BossClearRewardId == 0 || prob == 0)
+                {
+                    return;
+                }
+                
+                int minRange = _waveData.BossClearRewardMinAmount;
+                int maxRange = _waveData.BossClearRewardMaxAmount;
+                GetRewardByBossKill(prob, rewardId, minRange, maxRange);
+            }
+            
+            if (Random.value < _stageData.MonsterKillDropScrollprob)
+            {
+                PlayerModel model = ModelFactory.CreateOrGetModel<PlayerModel>();
+                if(!model.AcquiredRewardItemDict.ContainsKey(Const.ID_RANDOM_SCROLL))
+                {
+                    model.AcquiredRewardItemDict[Const.ID_RANDOM_SCROLL] = 0;
+                }
+
+                if (model.AcquiredRewardItemDict[Const.ID_RANDOM_SCROLL] < _stageData.MaxDropScrollCount)
+                {
+                    model.AcquiredRewardItemDict[Const.ID_RANDOM_SCROLL]++;
+                }
+            }
+
+            if (Random.value < _stageData.MosterKillDropLevelUpItemProb)
+            {
+                int id = Const.ID_SKILLUP;
+                if (!Manager.I.Data.DropItemDict.TryGetValue(id, out DropItemData dropItemData))
+                {
+                    Debug.LogWarning($"failed spawn drop item {id}");
+                    return;
+                }
+
+                SpawnDropItem(dropItemData, monsterPosition);
+            }
+        }
+
         private void ReceiveRewardItemByWaveClear(WaveData waveData)
         {
             List<int> waveClearRewardItemIdList = waveData.WaveClearRewardItemId;
@@ -200,6 +245,70 @@ namespace MewVivor.InGame.Stage
             }
         }
 
+        public override void SpawnDropItemByMonsterType(MonsterDeadData monsterDeadData)
+        {
+            MonsterType monsterType = monsterDeadData.MonsterType;
+            Vector3 monsterPosition = monsterDeadData.Position;
+            switch (monsterType)
+            {
+                case MonsterType.Normal:
+                    float value = Random.value;
+                    bool isPossibleSpawnDropItem = value > _waveData.nonDropRate;
+                    if (!isPossibleSpawnDropItem)
+                    {
+                        return;
+                    }
+
+                    GemType gemType = GemType.None;
+                    float purpleGemDropRate = _waveData.PurpleGemDropRate;
+                    float greenGemRatio = _waveData.GreenGemDropRate;
+                    float blueGemRatio = _waveData.BlueGemDropRate;
+                    float redGemDropRate = _waveData.RedGemDropRate;
+                    bool isSuccess = Utils.TrySpawnGem(ref gemType, purpleGemDropRate, greenGemRatio, blueGemRatio,
+                        redGemDropRate);
+                    
+                    if (isSuccess)
+                    {
+                        GemController gem = Manager.I.Object.MakeGem(gemType, monsterPosition);
+                        if (gem != null)
+                        {
+                            CurrentMapController.AddItemInGrid(gem.transform.position, gem);
+                        }
+                    }
+                    break;
+                case MonsterType.Boss:
+                case MonsterType.Elite:
+                    int targetWaveIndex = monsterDeadData.SpawnedWaveIndex;
+                    WaveData waveData = _stageData.WaveList.Find(v => v.WaveIndex == targetWaveIndex);
+                    
+                    if (waveData.EliteAndBossClearDropItemId == null ||
+                        waveData.EliteAndBossClearDropItemAmount == null)
+                    {
+                        return;
+                    }
+                    
+                    int idCount = waveData.EliteAndBossClearDropItemId.Count;
+                    List<int> dropItemIdList = waveData.EliteAndBossClearDropItemId;
+                    List<int> dropItemAmountList = waveData.EliteAndBossClearDropItemAmount;
+                    for (int i = 0; i < idCount; i++)
+                    {
+                        int id = dropItemIdList[i];
+                        if (!Manager.I.Data.DropItemDict.TryGetValue(id, out DropItemData dropItemData))
+                        {
+                            Debug.LogWarning($"failed spawn drop item {id}");
+                            continue;
+                        }
+
+                        int amount = dropItemAmountList[i];
+                        for (int j = 0; j < amount; j++)
+                        {
+                            SpawnDropItem(dropItemData, monsterPosition);
+                        }
+                    }
+                    break;
+            }
+        }
+        
         public override void SpawnDropItemByMonsterType(MonsterController monster)
         {
             if (monster.IsDestroyed())

@@ -3,7 +3,6 @@ using DG.Tweening;
 using MewVivor.Common;
 using MewVivor.Data;
 using MewVivor.Enum;
-using MewVivor.InGame.Enum;
 using UnityEngine;
 
 namespace MewVivor.InGame.Skill.SKillBehaviour
@@ -13,69 +12,72 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
         [SerializeField] private GameObject _normalProjectileObject;
         [SerializeField] private GameObject _normalProjectileParticleObject;
         [SerializeField] private GameObject _ultimateProjectileParticleObject;
-        
+
         private CreatureController _owner;
         private AttackSkillData _attackSkillData;
-        private Collider2D[] _collider2Ds = new Collider2D[100];
         private bool _isMaxLevel;
-        
-        public override void Generate(Transform targetTransform, Vector3 direction, AttackSkillData attackSkillData, CreatureController owner, int currentLevel)
+        private Unity.Entities.Entity _skillEntity;
+        private Vector3 _direction;
+        private float _projectileSpeed;
+        private bool _isReceivedHitMonsterEntityEvent = false;
+
+        public override void Generate(Transform targetTransform, Vector3 direction, AttackSkillData attackSkillData,
+            CreatureController owner, int currentLevel)
         {
             transform.position = targetTransform.position;
             transform.localScale = Vector3.one * attackSkillData.Scale;
             _owner = owner;
             _attackSkillData = attackSkillData;
+            _isReceivedHitMonsterEntityEvent = false;
 
             bool isMaxLevel = Const.MAX_AttackSKiLL_Level == currentLevel;
             _isMaxLevel = isMaxLevel;
             _normalProjectileObject.SetActive(true);
             _normalProjectileParticleObject.SetActive(false);
             _ultimateProjectileParticleObject.SetActive(false);
-            _rigidbody.simulated = true;
+            // _rigidbody.simulated = true;
             gameObject.SetActive(true);
-            
+
             var modifer = owner.SkillBook.GetPassiveSkillStatModifer(PassiveSkillType.ProjectileSpeed);
             float speed = Utils.CalculateStatValue(attackSkillData.ProjectileSpeed, modifer);
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            _rigidbody.SetRotation(angle);
-            _rigidbody.linearVelocity = direction * speed;
+            // _rigidbody.SetRotation(angle);
+            // _rigidbody.linearVelocity = direction * speed;
 
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            _direction = direction;
+            _projectileSpeed = speed;
             StartCoroutine(WaitDuration(Const.PROJECTILE_LIFE_CYCLE, Release));
+
+            _skillEntity = CreateBaseSkillEntity(attackSkillData);
         }
 
-        protected override void OnTriggerEnter2D(Collider2D other)
+        private void Update()
         {
-            if (!other.CompareTag(Tag.Monster) && !other.CompareTag(Tag.ItemBox))
+            transform.Translate(_direction * (_projectileSpeed * Time.deltaTime), Space.World);
+        }
+
+        public override void OnHitMonsterEntity(Unity.Entities.Entity monsterEntity)
+        {
+            if (_isReceivedHitMonsterEntityEvent)
             {
                 return;
             }
-            
-            OnHit.Invoke(other.transform, this);
+
+            _isReceivedHitMonsterEntityEvent = true;
+            base.OnHitMonsterEntity(monsterEntity);
+
+            StopAllCoroutines();
             var modifer = _owner.SkillBook.GetPassiveSkillStatModifer(PassiveSkillType.ExplsionRange);
             float attackRange = Utils.CalculateStatValue(_attackSkillData.AttackRange, modifer);
             float explosionSkillSize = Utils.GetPlayerStat(CreatureStatType.ExplosionSkillSize);
             attackRange *= explosionSkillSize;
-            
-            int cnt = Physics2D.OverlapCircleNonAlloc(transform.position, attackRange,
-                _collider2Ds, Layer.AttackableLayer);
-            if (cnt > 0)
-            {
-                for (int i = 0; i < cnt; i++)
-                {
-                    Collider2D col = _collider2Ds[i];
-                    if (col == null || other == col)
-                    {
-                        continue;
-                    }
+            CreateExplosionSkillComponent(_skillEntity, attackRange);
 
-                    OnHit.Invoke(col.transform, this);
-                }
-            }
-            
             _normalProjectileParticleObject.SetActive(!_isMaxLevel);
             _ultimateProjectileParticleObject.SetActive(_isMaxLevel);
             _normalProjectileObject.SetActive(false);
-            _rigidbody.simulated = false;
+            // _rigidbody.simulated = false;
             DOVirtual.DelayedCall(1, Release);
         }
     }

@@ -57,14 +57,14 @@ namespace MewVivor.InGame.Skill.SKillBehaviour
 
             // _rigidbody.linearVelocity = dir * attackSkillData.ProjectileSpeed;
 
-            var skillSpawnSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<SkillSpawnSystem>();
-            skillSpawnSystem.CreateSkill(gameObject, attackSkillData);
+            CreateBaseSkillEntity(attackSkillData);
         }
         
         private void Update()
         {
-            transform.Translate(Vector2.right * (_attackSkillData.ProjectileSpeed * Time.deltaTime));
+            // transform.Translate(Vector2.right * (_attackSkillData.ProjectileSpeed * Time.deltaTime));
             
+            gameObject.SetActive(false);
             if (_camera == null || !gameObject.activeInHierarchy)
             {
                 return;

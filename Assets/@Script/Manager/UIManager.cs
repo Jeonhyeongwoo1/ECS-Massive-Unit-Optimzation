@@ -26,6 +26,21 @@ namespace MewVivor.Managers
             }
         }
 
+        public UI_FontController UIFontObject
+        {
+            get
+            {
+                if (_uiFontObject == null)
+                {
+                    var obj = GameObject.Find("@UI_Font");
+                    _uiFontObject = obj.GetComponent<UI_FontController>();
+                }
+
+                return _uiFontObject;
+            }
+        }
+
+        private UI_FontController _uiFontObject;
         private GameObject _uiRootObject;
         private Stack<BasePopup> _popupStack = new();
 

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MewVivor.Data;
 using MewVivor.InGame.Enum;
+using Unity.Entities;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -74,6 +75,11 @@ namespace MewVivor.InGame.Skill
             
         }
 
+        public virtual void OnHitMonsterEntity(Unity.Entities.Entity monsterEntity)
+        {
+            
+        }
+
         protected async UniTaskVoid ApplyDamagedAsync(CancellationTokenSource cancellationTokenSource, Action damageAction)
         {
             CancellationToken token = cancellationTokenSource.Token;
@@ -127,6 +133,20 @@ namespace MewVivor.InGame.Skill
         {
             yield return new WaitForSeconds(duration);
             done?.Invoke();
+        }
+
+        protected virtual Unity.Entities.Entity CreateBaseSkillEntity(AttackSkillData attackSkillData, bool isIntervalAttack = false,
+            float intervalAttackTime = 0, int attackCount = 1)
+        {
+            var skillSpawnSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<SkillSpawnSystem>();
+            return skillSpawnSystem.CreateBaseSkillEntity(this, attackSkillData, isIntervalAttack, intervalAttackTime,
+                attackCount);
+        }
+
+        protected virtual Unity.Entities.Entity CreateExplosionSkillComponent(Unity.Entities.Entity skillEntity, float attackRange)
+        {
+            var skillSpawnSystem = World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<SkillSpawnSystem>();
+            return skillSpawnSystem.CreateExplosionSkill(skillEntity, attackRange);
         }
     }
 }
